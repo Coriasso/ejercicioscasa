@@ -1,4 +1,3 @@
-package com.iesvirgendelcarmen.ejercicios;
 
 import java.util.ArrayList;
 

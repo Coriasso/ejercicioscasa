@@ -1,4 +1,3 @@
-package com.iesvirgendelcarmen.ejercicios;
 
 import java.util.Date;
 
@@ -14,6 +13,7 @@ public class CuentaBancaria {
 	Date date = new Date();
 	
 	private Date fechaCreacion = date;
+	//private LocalDate fechaCreacion = LocalDate.now();
 	
 	private final String ENTIDAD = "1234";
 	
@@ -30,8 +30,8 @@ public class CuentaBancaria {
 
 		this.saldo = saldo; 
 		this.interes = interes;	
-		String numerosFinalesCuenta = numerosDeLaCuenta();
-		numeroCuenta= ENTIDAD + "-" + OFICINA + "-" + primerNumeroControl()+ segundoNumeroDeControl(numerosFinalesCuenta) + "-" + numerosFinalesCuenta;
+		//String numerosFinalesCuenta = numerosDeLaCuenta();
+		numeroCuenta= ENTIDAD + "-" + OFICINA + "-" + primerNumeroControl()+ segundoNumeroDeControl(numerosDeLaCuenta()) + "-" + numerosDeLaCuenta();
 		numeroTotalDeCuentas+=1;
 		
 	}
@@ -96,7 +96,7 @@ public class CuentaBancaria {
 	
 	public String numerosDeLaCuenta() {
 		long multiplicador =(long) (Math.pow(10, 10));
-		int numero = (int)(Math.random()*multiplicador);
+		long numero = (long)(Math.random()*multiplicador);
 		String numeroCadena = numero + "";
 		
 		
@@ -147,8 +147,9 @@ public class CuentaBancaria {
 		
 		primeraCifra = 11 - primeraCifra;
 			
-		if (primeraCifra !=10)
+		if (primeraCifra == 10)
 			return 1 + "";
+			
 		
 		
 		
