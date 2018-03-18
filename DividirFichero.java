@@ -1,4 +1,4 @@
-package com.iesvirgendelcarmen.ejercicios;
+
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -7,20 +7,21 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Scanner;
 
 public class DividirFichero {
 
 	public static void main(String[] args) {
 		//Controlar la entrada de 2 argumentos
 		if (args.length != 2) {
-			System.out.println("Número de argumentos inválidos");
+			System.out.println("NÃºmero de argumentos invÃ¡lidos");
 			System.exit(1); 			
 		}
 		//Declaramos todas las variables que vamos a crear
 		File inFile = new File(args[0]);
 		int NumArchivos = Integer.parseInt(args[1]);
-		int tamañoJustoArchivos = 0;
-		int tamañoSobraArchivos = 0;
+		int tamaÃ±oJustoArchivos = 0;
+		int tamaÃ±oSobraArchivos = 0;
 
 		if(!inFile.exists()) {
 			System.out.println("No existe el fichero");
@@ -28,41 +29,49 @@ public class DividirFichero {
 
 		}
 		if (!args[1].matches("[\\d+]")) {
-			System.out.println("Número inválido");
+			System.out.println("NÃºmero invÃ¡lido");
 			System.exit(1);
 		}
 
-		System.out.println("Todo bien, todo correcto, el programa empezará ahora");
+		System.out.println("Todo bien, todo correcto, el programa empezarÃ¡ ahora");
 
-		//Determinar el tamaño de cada parte
+		//Determinar el tamaÃ±o de cada parte
 
 
-		tamañoJustoArchivos = (int) Math.floor(((((double) inFile.length())/Double.parseDouble((args[1])))));
+		tamaÃ±oJustoArchivos = (int) Math.floor(((((double) inFile.length())/Double.parseDouble((args[1])))));
 
-		//Comprueba si la división es exacta, si no lo es coge el número de bytes sobrantes y los guarda
+		//Comprueba si la divisiÃ³n es exacta, si no lo es coge el nÃºmero de bytes sobrantes y los guarda
 		if ((int) inFile.length() % Integer.parseInt(args[1]) != 0) {
 
-			tamañoSobraArchivos = (int) inFile.length() % Integer.parseInt(args[1]);
-			System.out.printf("Tamaño del archivo a partir: %s%nNúmero de archivos que se van a generar: %d, de tamaño %d y una parte de tamaño %d%n"
-					, inFile.length(), NumArchivos, tamañoJustoArchivos,tamañoSobraArchivos);
+			tamaÃ±oSobraArchivos = (int) inFile.length() % Integer.parseInt(args[1]);
+			System.out.printf("TamaÃ±o del archivo a partir: %s%nNÃºmero de archivos que se van a generar: %d, de tamaÃ±o %d y una parte de tamaÃ±o %d%n"
+					, inFile.length(), NumArchivos, tamaÃ±oJustoArchivos,tamaÃ±oSobraArchivos);
 
 		}
 		else
-			System.out.printf("Tamaño del archivo a partir: %s%nNúmero de archivos que se van a generar: %d, de tamaño %d%n", inFile.length(), NumArchivos,tamañoJustoArchivos);	
+			System.out.printf("TamaÃ±o del archivo a partir: %s%nNÃºmero de archivos que se van a generar: %d, de tamaÃ±o %d%n", inFile.length(), NumArchivos,tamaÃ±oJustoArchivos);	
 
 
-		try (InputStream in = new FileInputStream(inFile); ){
+		try (InputStream in = new FileInputStream(inFile);Scanner sc = new Scanner(System.in); ){
 			//Creamos la salida sin inicializar
 			OutputStream out = null;
 			int ByteRead = 0;
+			System.out.println("Indique el nombre de los archivos copiados");
 
-			//Fragmentación del archivo. El primer for da tantas vueltas como archivos se vayan a crear y el segundo tantas como bytes de tamaño tengan estas nuevas partes
-			//Al final, si hay bytes que sobran se escriben también
+			//Creamos la carpeta "archivos" en caso de que no existiese. En caso de existir ya no arroja ningÃºn tipo de error o excepciÃ³n
+			File archivosDir = new File ("archivos");
+			archivosDir.mkdir();
+
+			String nombreArchivo = sc.nextLine();
+
+
+			//FragmentaciÃ³n del archivo. El primer for da tantas vueltas como archivos se vayan a crear y el segundo tantas como bytes de tamaÃ±o tengan estas nuevas partes
+			//Al final, si hay bytes que sobran se escriben tambiÃ©n
 
 			for (int i = 0; i < NumArchivos; i++) {
-				out = new FileOutputStream ("archivos/fichero_copia"+(i+1)+".txt"); // Al principio de cada for creamos un nuevo objeto con la ruta de una de las partes nuevas
+				out = new FileOutputStream ("archivos/"+ nombreArchivo +(i+1)+".txt"); // Al principio de cada for creamos un nuevo objeto con la ruta de una de las partes nuevas
 
-				for (int j = 0; j < tamañoJustoArchivos; j++) {
+				for (int j = 0; j < tamaÃ±oJustoArchivos; j++) {
 
 					ByteRead = in.read();
 					out.write(ByteRead); 	
@@ -73,10 +82,10 @@ public class DividirFichero {
 				out.flush();
 
 
-				//Comprueba que es la última iteración del for y si hay bytes sobrantes
-				if (i == NumArchivos - 1 && tamañoSobraArchivos != 0) {
-					out = new FileOutputStream ("archivos/fichero_copia"+(i+2)+".txt");
-					for (int j = 0; j < tamañoSobraArchivos; j++) {
+				//Comprueba que es la Ãºltima iteraciÃ³n del for y si hay bytes sobrantes
+				if (i == NumArchivos - 1 && tamaÃ±oSobraArchivos != 0) {
+					out = new FileOutputStream ("archivos/"+ nombreArchivo +(i+2)+".txt");
+					for (int j = 0; j < tamaÃ±oSobraArchivos; j++) {
 
 						ByteRead = in.read();
 						out.write(ByteRead);
@@ -85,13 +94,12 @@ public class DividirFichero {
 
 					}
 					out.flush();
-					
 				}
 
-				
+
 
 			}
-			
+
 			out.close();
 			System.out.println("Archivos copiados sin problemas");
 
