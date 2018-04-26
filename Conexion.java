@@ -3,9 +3,7 @@ package com.iesvirgendelcarmen.ejercicio;
 import java.io.FileReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Properties;
 
 
@@ -14,7 +12,7 @@ import org.sqlite.SQLiteConfig;
 public class Conexion {
 
 	private static Connection conexion = null;
-	private Statement st;
+	
 
 	private Conexion() {
 
@@ -45,19 +43,18 @@ public class Conexion {
 				SQLiteConfig config = new SQLiteConfig();
 				config.enforceForeignKeys(true);
 				conexion = DriverManager.getConnection(DB_URL + BD, config.toProperties());
-				st = (Statement) conexion.createStatement();
 			}catch(SQLException e) {
 				System.out.println("Error SQL");
 			}
 
 		} catch (ClassNotFoundException e) {
-			
+
 			System.out.println("class not found");
 		}
-		
 
 
-	
+
+
 
 	}
 
@@ -70,11 +67,6 @@ public class Conexion {
 		return conexion;
 	}
 
-	public ResultSet busqueda(String nombre) {
 
-		String sqlConsultarUsuario ="Select * FROM usuario WHERE login=";
-
-		return null;
-	}
 
 }
